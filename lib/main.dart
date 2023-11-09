@@ -34,15 +34,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // int _counter = 0;
-  //
-  // void _incrementCounter() {
-  //   setState(() {
-  //     _counter++;
-  //   });
-  // }
 
   void interfaceAjoutDemande() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => demande.MyApp()),
+    );
+  }
+
+  void interfaceInscriptionPassager() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => demande.MyApp()),
@@ -53,24 +53,45 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return
       Container(
-        width: 150.0,
+        width: 300.0,
         height: 50.0,
-        child: ElevatedButton.icon(
-          icon: const Icon(
-            Icons.add,
-            color: Colors.pink,
-            size: 32.0, // Adjust the icon size here
-          ),
-          label: const Text("Ajouter", style: TextStyle(fontSize: 18.0)), // Adjust the text size here
-          onPressed: () {
-            interfaceAjoutDemande();
-          },
-          style: ButtonStyle(
-            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.all(12.0), // Adjust the padding here
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton.icon(
+              icon: const Icon(
+                Icons.add,
+                color: Colors.pink,
+                size: 32.0,
+              ),
+              label: const Text("Ajouter Une Demande", style: TextStyle(fontSize: 18.0)),
+              onPressed: () {
+                interfaceAjoutDemande();
+              },
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  EdgeInsets.all(12.0),
+                ),
+              ),
             ),
-          ),
-        )
+            ElevatedButton.icon(
+              icon: const Icon(
+                Icons.add,
+                color: Colors.pink,
+                size: 32.0,
+              ),
+              label: const Text("S'inscrire", style: TextStyle(fontSize: 18.0)),
+              onPressed: () {
+                // Handle the action for the second button here
+              },
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  EdgeInsets.all(12.0),
+                ),
+              ),
+            ),
+          ],
+        ),
       );
   }
 }
