@@ -55,7 +55,7 @@ class _DemandeFormState extends State<DemandeForm> {
 
   Future<void> ajouterDemandeToFirestore() async {
 
-    CollectionReference demandes = FirebaseFirestore.instance.collection('Demande');
+    CollectionReference demandes = FirebaseFirestore.instance.collection('Demandes');
 
     QuerySnapshot toutLesDemandes = await demandes.get();
     int nombreDemande = toutLesDemandes.docs.length;

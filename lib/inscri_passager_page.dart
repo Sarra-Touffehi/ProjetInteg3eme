@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 
 void main() {
@@ -32,7 +33,6 @@ class InsPassager extends StatefulWidget {
 }
 
 class _InscriptionState extends State<InsPassager> {
-  Map userData = {};
 
   final _formkey = GlobalKey<FormState>();
 
@@ -41,6 +41,19 @@ class _InscriptionState extends State<InsPassager> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController adresseController = TextEditingController();
+
+  TextEditingController dateDeNaissanceController = TextEditingController();
+  TextEditingController genreController = TextEditingController(text: "Male");
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+
+  @override
+  void initState() {
+    dateDeNaissanceController.text = ""; //set the initial value of text field
+    super.initState();
+  }
+
+  Map userData = {};
 
   Future<void> ajouterPassagerToFirestore() async {
 
@@ -58,6 +71,9 @@ class _InscriptionState extends State<InsPassager> {
       'telephone': mobileController.text,
       'localisation': adresseController.text,
       'email': emailController.text,
+      'datedenaissance': dateDeNaissanceController.text,
+      'genre': genreController.text,
+      'password': passwordController.text,
     });
 
     setState(() {
@@ -66,6 +82,9 @@ class _InscriptionState extends State<InsPassager> {
       userData['telephone'] = mobileController.text;
       userData['localisation'] = mobileController.text;
       userData['email'] = emailController.text;
+      userData['datedenaissance'] = dateDeNaissanceController.text;
+      userData['genre'] = genreController.text;
+      userData['password'] = passwordController.text;
     });
   }
 
@@ -139,6 +158,154 @@ class _InscriptionState extends State<InsPassager> {
                                 BorderRadius.all(Radius.circular(9.0)))),
                       ),
                     ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DropdownButtonFormField<String>(
+                        value: genreController.text,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            genreController.text = newValue!;
+                          });
+                        },
+                        items: ['Male', 'Female'].map((String option) {
+                          return DropdownMenuItem<String>(
+                            value: option,
+                            child: Text(option),
+                          );
+                        }).toList(),
+                        decoration: InputDecoration(
+                          hintText: 'Genre',
+                          labelText: 'Genre',
+                          prefixIcon: Icon(
+                            Icons.person,
+                            color: Colors.green,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                            borderRadius: BorderRadius.all(Radius.circular(9)),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: TextFormField(
+                        controller: dateDeNaissanceController,
+                        decoration: InputDecoration(
+                            hintText: 'Entre Votre Date de Naissance',
+                            labelText: 'Date de Naissance',
+                            prefixIcon: Icon(
+                              Icons.calendar_today,
+                              color: Colors.green,
+                            ),
+                            errorStyle: TextStyle(fontSize: 18.0),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(9.0)))
+                        ),
+                        readOnly: true,
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                              context: context, initialDate: DateTime.now(),
+                              firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
+                              lastDate: DateTime(2101)
+                          );
+
+                          if(pickedDate != null ){
+                            print(pickedDate);
+                            String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                            print(formattedDate);
+                            setState(() {
+                              dateDeNaissanceController.text = formattedDate; //set output date to TextField value.
+                            });
+                          }else{
+                            print("Date is not selected");
+                          }
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: emailController,
+                        validator: MultiValidator([
+                          RequiredValidator(errorText: 'Veiller entrer Votre E-mail'),
+                          EmailValidator(
+                              errorText: 'Entrer une Adresse valide'),
+                        ]),
+                        decoration: InputDecoration(
+                            hintText: 'E-mail',
+                            labelText: 'E-mail',
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Colors.yellow,
+                            ),
+                            errorStyle: TextStyle(fontSize: 18.0),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(9.0)))),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: passwordController,
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Veuillez entrer un mot de passe';
+                          }
+                          // Add additional validation if needed
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Mot de Passe',
+                          labelText: 'Mot de Passe',
+                          prefixIcon: Icon(
+                            Icons.lock,
+                            color: Colors.blue,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                            borderRadius: BorderRadius.all(Radius.circular(9)),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: confirmPasswordController,
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Veuillez confirmer votre mot de passe';
+                          }
+                          if (value != passwordController.text) {
+                            return 'Les mots de passe ne correspondent pas';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Confirmer Mot de Passe',
+                          labelText: 'Confirmer Mot de Passe',
+                          prefixIcon: Icon(
+                            Icons.lock,
+                            color: Colors.blue,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                            borderRadius: BorderRadius.all(Radius.circular(9)),
+                          ),
+                        ),
+                      ),
+                    ),
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
@@ -187,29 +354,8 @@ class _InscriptionState extends State<InsPassager> {
                                 BorderRadius.all(Radius.circular(9.0)))),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: emailController,
-                        validator: MultiValidator([
-                          RequiredValidator(errorText: 'Veiller entrer Votre E-mail'),
-                          EmailValidator(
-                              errorText: 'Entrer une Adresse valide'),
-                        ]),
-                        decoration: InputDecoration(
-                            hintText: 'E-mail',
-                            labelText: 'E-mail',
-                            prefixIcon: Icon(
-                              Icons.email,
-                              color: Colors.yellow,
-                            ),
-                            errorStyle: TextStyle(fontSize: 18.0),
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red),
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(9.0)))),
-                      ),
-                    ),
+
+
                     Center(
                         child: Padding(
                           padding: const EdgeInsets.all(18.0),
@@ -217,13 +363,6 @@ class _InscriptionState extends State<InsPassager> {
                             // margin: EdgeInsets.fromLTRB(200, 20, 50, 0),
                             child:ElevatedButton(
                               onPressed: () async {
-                                setState(() {
-                                  userData['nom'] = firstNameController.text;
-                                  userData['prenom'] = lastNameController.text;
-                                  userData['telephone'] = emailController.text;
-                                  userData['localisation'] = mobileController.text;
-                                  userData['email'] = mobileController.text;
-                                });
                                 if (_formkey.currentState!.validate()) {
                                   await ajouterPassagerToFirestore();
                                   print('form submiitted');
@@ -232,24 +371,15 @@ class _InscriptionState extends State<InsPassager> {
                               },
                               child: Text('Ajouter'),
                             ),
-
                             width: MediaQuery.of(context).size.width,
                             height: 50,
                           ),
                         )),
-                    Center(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 60),
-                        child: Text(
-                          'SIGN IN',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    )
                   ],
-                )),
+                )
+            ),
           ),
-        ));
+        )
+    );
   }
 }

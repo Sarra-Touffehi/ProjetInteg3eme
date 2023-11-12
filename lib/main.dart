@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
+
 import 'demande_page.dart'as demande;
 import 'inscri_passager_page.dart' as isnPassager;
+import 'traiter_demande.dart' as traiterDemande;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,17 +64,19 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void interfaceTraiterDemande() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => traiterDemande.MyApp(demandeId : "1"))
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return
-      Container(
-        width: 300.0,
-        height: 50.0,
-        child: Row(
+    return Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              child: ElevatedButton.icon(
+            ElevatedButton.icon(
                 icon: const Icon(
                   Icons.add,
                   color: Colors.pink,
@@ -88,7 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-            ),
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.add,
@@ -105,8 +108,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
+            ElevatedButton.icon(
+              icon: const Icon(
+                Icons.add,
+                color: Colors.pink,
+                size: 32.0,
+              ),
+              label: const Text("Traiter Demande", style: TextStyle(fontSize: 18.0)),
+              onPressed: () {
+                interfaceTraiterDemande();
+              },
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  EdgeInsets.all(12.0),
+                ),
+              ),
+            ),
           ],
-        ),
-      );
+        );
   }
 }
