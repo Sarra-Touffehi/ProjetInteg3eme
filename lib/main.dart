@@ -1,9 +1,22 @@
-import 'package:flutter/material.dart';
-//import 'package:flutter/rendering.dart';
-import 'demande_page.dart'as demande;
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
-  //debugPaintSizeEnabled = true;
+import 'package:flutter/material.dart';
+import 'demande_page.dart'as demande;
+import 'inscri_passager_page.dart' as isnPassager;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+        apiKey: "AIzaSyDLD4gYqv310QPZgJZ1QyqgDWqEyuZwZiM",
+        authDomain: "integration-00001.firebaseapp.com",
+        projectId: "integration-00001",
+        storageBucket: "integration-00001.appspot.com",
+        messagingSenderId: "211284719098",
+        appId: "1:211284719098:web:6df01d1d0aaf06e14f6043",
+        measurementId: "G-6FCCG7C1SB"
+    ),
+  );
   runApp(const MyApp());
 }
 
@@ -45,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void interfaceInscriptionPassager() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => demande.MyApp()),
+      MaterialPageRoute(builder: (context) => isnPassager.MyApp()),
     );
   }
 
@@ -58,19 +71,21 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            ElevatedButton.icon(
-              icon: const Icon(
-                Icons.add,
-                color: Colors.pink,
-                size: 32.0,
-              ),
-              label: const Text("Ajouter Une Demande", style: TextStyle(fontSize: 18.0)),
-              onPressed: () {
-                interfaceAjoutDemande();
-              },
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  EdgeInsets.all(12.0),
+            Container(
+              child: ElevatedButton.icon(
+                icon: const Icon(
+                  Icons.add,
+                  color: Colors.pink,
+                  size: 32.0,
+                ),
+                label: const Text("Demander", style: TextStyle(fontSize: 18.0)),
+                onPressed: () {
+                  interfaceAjoutDemande();
+                },
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.all(12.0),
+                  ),
                 ),
               ),
             ),
@@ -82,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               label: const Text("S'inscrire", style: TextStyle(fontSize: 18.0)),
               onPressed: () {
-                // Handle the action for the second button here
+                interfaceInscriptionPassager();
               },
               style: ButtonStyle(
                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(

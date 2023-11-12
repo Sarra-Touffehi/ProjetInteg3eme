@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'classes/demande.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'services/localisation.dart';
 
@@ -24,6 +24,8 @@ class MyApp extends StatelessWidget {
 }
 
 class DemandeForm extends StatefulWidget {
+  const DemandeForm({Key? key})  : super(key: key);
+
   @override
   _DemandeFormState createState() => _DemandeFormState();
 
@@ -31,7 +33,17 @@ class DemandeForm extends StatefulWidget {
 
 class _DemandeFormState extends State<DemandeForm> {
 
-  Position? currentPosition;
+  @override
+  void initState() {
+    super.initState();
+    updateDestination();
+  }
+
+  String? nombrePersonne="1";
+  List<String> nombrePersonneOptions = ['1', '2', '3', '4'];
+
+  final _formkey = GlobalKey<FormState>();
+  Map demandeData = {};
 
   int nbrPersonne = 1;
 
@@ -41,23 +53,33 @@ class _DemandeFormState extends State<DemandeForm> {
   final TextEditingController nbrpersonneController = TextEditingController(text: "1");
   final TextEditingController commentaireController = TextEditingController();
 
+  Future<void> ajouterDemandeToFirestore() async {
 
-  final String baseurl="http://127.0.0.1";
+    CollectionReference demandes = FirebaseFirestore.instance.collection('Demande');
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    QuerySnapshot toutLesDemandes = await demandes.get();
+    int nombreDemande = toutLesDemandes.docs.length;
+    String idPassager = (nombreDemande + 1).toString();
+    DocumentReference docRef = demandes.doc(idPassager);
 
-  void _submitForm() {
+    // Set the data for the document
+    await docRef.set({
+      'depart': departController.text,
+      'destination': destinationController.text,
+      'nbrpersonne': nbrpersonneController.text,
+      'commentaire': commentaireController.text,
+      'prix': prixController.text,
+      'etat': "enattente",
+    });
 
-    final Demande demande = Demande(
-      depart: departController.text,
-      destination: destinationController.text,
-      prix: prixController.text,
-      nbrPersonne: int.parse(nbrpersonneController.text),
-      commentaire: commentaireController.text,
-    );
-
-    demande.ajouterDemande();
-
+    setState(() {
+      demandeData['depart'] = departController.text;
+      demandeData['destination'] = destinationController.text;
+      demandeData['nbrpersonne'] = nbrpersonneController.text;
+      demandeData['commentaire'] = commentaireController.text;
+      demandeData['prix'] = prixController.text;
+      demandeData['etat'] = "enattente";
+    });
   }
 
   Future<void> updateDestination() async {
@@ -73,139 +95,176 @@ class _DemandeFormState extends State<DemandeForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: departController,
-                  decoration: InputDecoration(
-                    labelText: 'Depart',
-                    prefixIcon: Icon(Icons.location_on),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Veiller enter un Depart';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  updateDestination();
-                },
-                child: Text('Update Localisation'),
-              ),
-            ],
+    return Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Form(
+                key: _formkey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Center(
+                        child: Container(
+                          width: 200,
+                          height: 150,
+                          child: Image.asset('assets/img.png'),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: destinationController,
+                        validator: MultiValidator([
+                          RequiredValidator(errorText: 'Veiller entrer votre Adresse'),
+                          MinLengthValidator(10,
+                              errorText:
+                              'Le Adresse doit etre de 10 charactere minimum'),
+                        ]),
+                        decoration: InputDecoration(
+                            hintText: 'Entre Votre Destination',
+                            labelText: 'Destination',
+                            prefixIcon: Icon(
+                              Icons.home,
+                              color: Colors.green,
+                            ),
+                            errorStyle: TextStyle(fontSize: 18.0),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(9.0)))),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: TextFormField(
+                        controller: prixController,
+                        validator:  (value) {
+                              if (value == null || value.isEmpty) {
+                              return 'Veuillez entrer un prix';
+                              }
+
+                              // Use a regular expression to check for a valid decimal number
+                              RegExp decimalRegex = RegExp(r'^\d+(\.\d+)?$');
+
+                              if (!decimalRegex.hasMatch(value)) {
+                              return 'Veuillez entrer un Prix valide';
+                              }
+
+                              return null;
+                    },
+                        decoration: InputDecoration(
+                            hintText: 'Entre Votre Prix',
+                            labelText: 'Prix',
+                            prefixIcon: Icon(
+                              Icons.map,
+                              color: Colors.blue,
+                            ),
+                            errorStyle: TextStyle(fontSize: 18.0),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(9.0)))),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DropdownButtonFormField<String>(
+                        value: nombrePersonne,
+                        onChanged: (String? Value) {
+                          setState(() {
+                            nombrePersonne = Value;
+                          });
+                          nbrpersonneController.text = (Value) as String;
+                        },
+                        items: nombrePersonneOptions.map((String option) {
+                          return DropdownMenuItem<String>(
+                            value: option,
+                            child: Text(option),
+                          );
+                        }).toList(),
+                        decoration: InputDecoration(
+                          hintText: 'Sélectionnez un nombre',
+                          labelText: 'Nombre de Personne',
+                          prefixIcon: Icon(
+                            Icons.people,
+                            color: Colors.green,
+                          ),
+                          errorStyle: TextStyle(fontSize: 18.0),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                            borderRadius: BorderRadius.all(Radius.circular(9.0)),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Veuillez sélectionner un nombre';
+                          }
+                          return null; // Validation passed
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: commentaireController,
+                        validator: MultiValidator([
+                          RequiredValidator(errorText: 'Veiller entrer Un Commentaire'),
+                          MinLengthValidator(10,
+                              errorText:
+                              'Le Commentaire doit etre de 10 charactere minimum'),
+                        ]),
+                        decoration: InputDecoration(
+                            hintText: 'Entre un Commentaire',
+                            labelText: 'Commentaire',
+                            prefixIcon: Icon(
+                              Icons.comment,
+                              color: Colors.green,
+                            ),
+                            errorStyle: TextStyle(fontSize: 18.0),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(9.0)))),
+                      ),
+                    ),
+                    Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Container(
+                            // margin: EdgeInsets.fromLTRB(200, 20, 50, 0),
+                            child:ElevatedButton(
+                              onPressed: () async {
+                                if (_formkey.currentState!.validate()) {
+                                  await ajouterDemandeToFirestore();
+                                  print('form submiitted');
+                                  print(demandeData);
+                                }
+                              },
+                              child: Text('Ajouter'),
+                            ),
+
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                          ),
+                        )),
+                    Center(
+                      child: Container(
+                        padding: EdgeInsets.only(top: 60),
+                        child: Text(
+                          'SIGN IN',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
+                  ],
+                )),
           ),
-          TextFormField(
-            controller: destinationController,
-            decoration: InputDecoration(
-              labelText: 'Destination',
-              prefixIcon: Icon(Icons.location_on),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Veiller enter un Destination';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            controller: prixController,
-            decoration: InputDecoration(
-              labelText: 'Prix',
-              prefixIcon: Icon(Icons.attach_money),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Veiller enter un Prix';
-              }
-              return null;
-            },
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: nbrpersonneController,
-                  decoration: InputDecoration(
-                    labelText: 'Nombre de Personnes',
-                    prefixIcon: Icon(Icons.people),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Veiller enter un Nombre';
-                    }else if(int.parse(value)>4){
-                      return 'Le Nombre de Passager max est 4';
-                    }
-                    return null;
-                  },
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                ),
-              ),
-              IconButton(
-                icon: Icon(Icons.remove),
-                onPressed: () {
-                  setState(() {
-                    if (nbrPersonne > 1) {
-                      nbrPersonne--;
-                      nbrpersonneController.text = nbrPersonne.toString();
-                    }else{
-                      nbrpersonneController.text = "1";
-                    }
-                  });
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  setState(() {
-                    if (nbrPersonne < 4) {
-                      nbrPersonne++;
-                      nbrpersonneController.text = nbrPersonne.toString();
-                    }else{
-                      nbrpersonneController.text = "4";
-                    }
-                  });
-                },
-              ),
-            ],
-          ),
-          TextFormField(
-            controller: commentaireController,
-            decoration: InputDecoration(
-              labelText: 'Commentaire',
-              prefixIcon: Icon(Icons.comment),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Veiller enter un Commentaire';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 16), // Add some spacing
-          Builder(
-            builder: (BuildContext builderContext) {
-              return ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _submitForm();
-                  }
-                },
-                child: Text('Ajouter'),
-              );
-            },
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
 }
