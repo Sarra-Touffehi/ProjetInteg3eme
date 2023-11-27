@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Inscrir Passager'),
+          title: Text('Inscrire Passager'),
         ),
         body: InsPassager(),
       ),
@@ -58,7 +58,6 @@ class _InscriptionState extends State<InsPassager> {
   Future<void> ajouterPassagerToFirestore() async {
 
     CollectionReference passagers = FirebaseFirestore.instance.collection('Passagers');
-
     QuerySnapshot toutLesPassagers = await passagers.get();
     int nombrePassagers = toutLesPassagers.docs.length;
     String idPassager = (nombrePassagers + 1).toString();

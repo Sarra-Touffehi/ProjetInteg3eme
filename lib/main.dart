@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'demande_page.dart'as demande;
 import 'inscri_passager_page.dart' as isnPassager;
 import 'traiter_demande.dart' as traiterDemande;
+import 'loginPassager.dart' as loginPassager;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,65 +67,89 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void interfaceTraiterDemande() {
     Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => traiterDemande.MyApp(demandeId : "1"))
+        context,
+        MaterialPageRoute(builder: (context) => traiterDemande.MyApp(demandeId : "1"))
+    );
+  }
+
+
+  void interfaceConnexionPassager() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => loginPassager.MyApp())
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.add,
-                  color: Colors.pink,
-                  size: 32.0,
-                ),
-                label: const Text("Demander", style: TextStyle(fontSize: 18.0)),
-                onPressed: () {
-                  interfaceAjoutDemande();
-                },
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    EdgeInsets.all(12.0),
-                  ),
-                ),
-              ),
-            ElevatedButton.icon(
-              icon: const Icon(
-                Icons.add,
-                color: Colors.pink,
-                size: 32.0,
-              ),
-              label: const Text("S'inscrire", style: TextStyle(fontSize: 18.0)),
-              onPressed: () {
-                interfaceInscriptionPassager();
-              },
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  EdgeInsets.all(12.0),
-                ),
-              ),
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        ElevatedButton.icon(
+          icon: const Icon(
+            Icons.add,
+            color: Colors.pink,
+            size: 32.0,
+          ),
+          label: const Text("Demander", style: TextStyle(fontSize: 18.0)),
+          onPressed: () {
+            interfaceAjoutDemande();
+          },
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              EdgeInsets.all(12.0),
             ),
-            ElevatedButton.icon(
-              icon: const Icon(
-                Icons.add,
-                color: Colors.pink,
-                size: 32.0,
-              ),
-              label: const Text("Traiter Demande", style: TextStyle(fontSize: 18.0)),
-              onPressed: () {
-                interfaceTraiterDemande();
-              },
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  EdgeInsets.all(12.0),
-                ),
-              ),
+          ),
+        ),
+        ElevatedButton.icon(
+          icon: const Icon(
+            Icons.add,
+            color: Colors.pink,
+            size: 32.0,
+          ),
+          label: const Text("S'inscrire", style: TextStyle(fontSize: 18.0)),
+          onPressed: () {
+            interfaceInscriptionPassager();
+          },
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              EdgeInsets.all(12.0),
             ),
-          ],
-        );
+          ),
+        ),
+        ElevatedButton.icon(
+          icon: const Icon(
+            Icons.add,
+            color: Colors.pink,
+            size: 32.0,
+          ),
+          label: const Text("Traiter Demande", style: TextStyle(fontSize: 18.0)),
+          onPressed: () {
+            interfaceTraiterDemande();
+          },
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              EdgeInsets.all(12.0),
+            ),
+          ),
+        ),
+        ElevatedButton.icon(
+          icon: const Icon(
+            Icons.add,
+            color: Colors.pink,
+            size: 32.0,
+          ),
+          label: const Text("Se connecter Passager", style: TextStyle(fontSize: 18.0)),
+          onPressed: () {
+            interfaceConnexionPassager();
+          },
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              EdgeInsets.all(12.0),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
