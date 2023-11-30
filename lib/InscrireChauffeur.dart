@@ -17,22 +17,22 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Inscrire Passager'),
+          title: Text('Inscrire Chauffeur'),
         ),
-        body: InsPassager(),
+        body: InsChauffeur(),
       ),
     );
   }
 }
 
-class InsPassager extends StatefulWidget {
-  const InsPassager({Key? key}) : super(key: key);
+class InsChauffeur extends StatefulWidget {
+  const InsChauffeur({Key? key}) : super(key: key);
 
   @override
-  State<InsPassager> createState() => _InscriptionState();
+  State<InsChauffeur> createState() => _InscriptionState();
 }
 
-class _InscriptionState extends State<InsPassager> {
+class _InscriptionState extends State<InsChauffeur> {
 
   final _formkey = GlobalKey<FormState>();
 
@@ -41,7 +41,8 @@ class _InscriptionState extends State<InsPassager> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController adresseController = TextEditingController();
-
+  TextEditingController NumPermisController = TextEditingController();
+  TextEditingController NumMatriculeController = TextEditingController();
   TextEditingController dateDeNaissanceController = TextEditingController();
   TextEditingController genreController = TextEditingController(text: "Male");
   TextEditingController passwordController = TextEditingController();
@@ -49,21 +50,21 @@ class _InscriptionState extends State<InsPassager> {
 
   @override
   void initState() {
-    dateDeNaissanceController.text = ""; //set the initial value of text field
+    dateDeNaissanceController.text = "";
     super.initState();
   }
 
   Map userData = {};
 
-  Future<void> ajouterPassagerToFirestore() async {
+  Future<void> ajouterChauffeurToFirestore() async {
 
-    CollectionReference passagers = FirebaseFirestore.instance.collection('Passagers');
-    QuerySnapshot toutLesPassagers = await passagers.get();
-    int nombrePassagers = toutLesPassagers.docs.length;
+    CollectionReference chauffeurs = FirebaseFirestore.instance.collection('Chauffeurs');
+    QuerySnapshot toutLesChauffeurs = await chauffeurs.get();
+    int nombreChauffeurs = toutLesChauffeurs.docs.length;
     //crée un identifiant unique pour le nouveau passager en utilisant le nombre actuel de passagers et en l'incrémentant de 1
-    String idPassager = (nombrePassagers + 1).toString();
+    String idChauffeur = (nombreChauffeurs + 1).toString();
     //crée une référence à un nouveau document dans la collection 'Passagers' avec l'identifiant nouvellement généré.
-    DocumentReference docRef = passagers.doc(idPassager);
+    DocumentReference docRef = chauffeurs.doc(idChauffeur);
 
     // Set the data for the document
     await docRef.set({
@@ -75,6 +76,8 @@ class _InscriptionState extends State<InsPassager> {
       'datedenaissance': dateDeNaissanceController.text,
       'genre': genreController.text,
       'password': passwordController.text,
+      'numPermis':NumPermisController,
+      'numMatricule':NumMatriculeController,
     });
 //met à jour l'état de la page en assignant les valeurs actuelles
 // des contrôleurs de texte aux clés correspondantes dans la carte userData.
@@ -86,7 +89,9 @@ class _InscriptionState extends State<InsPassager> {
       userData['email'] = emailController.text;
       userData['datedenaissance'] = dateDeNaissanceController.text;
       userData['genre'] = genreController.text;
-      userData['password'] = passwordController.text;
+      userData['numPermis'] = NumPermisController.text;
+      userData['numMatricule'] = NumMatriculeController.text;
+
     });
   }
 
@@ -356,8 +361,55 @@ class _InscriptionState extends State<InsPassager> {
                                 BorderRadius.all(Radius.circular(9.0)))),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: NumPermisController,
+                        validator: MultiValidator([
+                          RequiredValidator(errorText: 'Veiller entrer votre Numero de Permis'),
+                          MinLengthValidator(3,
+                              errorText:
+                              'Le numero de permis doit contenir de 3 charactere minimum'),
+                        ]),
+                        decoration: InputDecoration(
+                            hintText: 'Entre Votre Numero de Permis',
+                            labelText: 'Numéro de permis',
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: Colors.green,
+                            ),
+                            errorStyle: TextStyle(fontSize: 18.0),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(9.0)))),
+                      ),
+                    ),
 
-
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: NumMatriculeController,
+                        validator: MultiValidator([
+                          RequiredValidator(errorText: 'Veiller entrer votre matricule '),
+                          MinLengthValidator(3,
+                              errorText:
+                              'Le numero de matricule doit contenir de 3 charactere minimum'),
+                        ]),
+                        decoration: InputDecoration(
+                            hintText: 'Entre Votre matricule',
+                            labelText: 'matricule',
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: Colors.green,
+                            ),
+                            errorStyle: TextStyle(fontSize: 18.0),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(9.0)))),
+                      ),
+                    ),
                     Center(
                         child: Padding(
                           padding: const EdgeInsets.all(18.0),
@@ -366,9 +418,17 @@ class _InscriptionState extends State<InsPassager> {
                             child:ElevatedButton(
                               onPressed: () async {
                                 if (_formkey.currentState!.validate()) {
-                                  await ajouterPassagerToFirestore();
+                                  await ajouterChauffeurToFirestore();
                                   print('form submiitted');
                                   print(userData);
+                                }
+                                else {
+                                  // Show a message if the form is not valid
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Veuillez corriger les erreurs dans le formulaire.'),
+                                    ),
+                                  );
                                 }
                               },
                               child: Text('Ajouter'),

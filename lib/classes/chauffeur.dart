@@ -1,5 +1,4 @@
 import 'package:geolocator/geolocator.dart';
-
 import '../services/localisation.dart';
 import 'demande.dart';
 
@@ -7,10 +6,27 @@ class Chauffeur{
   int id;
   String nom;
   String positionActuelle;
+  final String prenom;
+  final String adresse;
+  //final int age;
+  final String email;
+  final int numTel;
+  final String motdepasse;
+  final int numPermis;
+  final int numMatricule;
+
+
 
   Chauffeur({
     required this.id,
     required this.nom,
+    required this.prenom,
+    required this.adresse,
+    required this.email,
+    required this.numTel,
+    required this.motdepasse,
+    required this.numMatricule,
+    required this.numPermis,
     required this.positionActuelle
   }){
     updatePosition();

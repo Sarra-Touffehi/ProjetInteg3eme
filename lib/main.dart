@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
-
+import 'InscrireChauffeur.dart'  as InsChauffeur;
 import 'demande_page.dart'as demande;
 import 'inscri_passager_page.dart' as isnPassager;
 import 'traiter_demande.dart' as traiterDemande;
@@ -64,6 +64,12 @@ class _MyHomePageState extends State<MyHomePage> {
       MaterialPageRoute(builder: (context) => isnPassager.MyApp()),
     );
   }
+  void interfaceInscriptionChauffeur() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => InsChauffeur.MyApp()),
+    );
+  }
 
   void interfaceTraiterDemande() {
     Navigator.push(
@@ -107,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.pink,
             size: 32.0,
           ),
-          label: const Text("S'inscrire", style: TextStyle(fontSize: 18.0)),
+          label: const Text("S'inscrire Passager", style: TextStyle(fontSize: 18.0)),
           onPressed: () {
             interfaceInscriptionPassager();
           },
@@ -117,6 +123,23 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
+        ElevatedButton.icon(
+          icon: const Icon(
+            Icons.add,
+            color: Colors.pink,
+            size: 32.0,
+          ),
+          label: const Text("S'inscrire Chauffeur ", style: TextStyle(fontSize: 18.0)),
+          onPressed: () {
+            interfaceInscriptionChauffeur();
+          },
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              EdgeInsets.all(12.0),
+            ),
+          ),
+        ),
+
         ElevatedButton.icon(
           icon: const Icon(
             Icons.add,
