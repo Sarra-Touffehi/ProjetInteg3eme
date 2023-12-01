@@ -88,7 +88,15 @@ class _InscriptionState extends State<InsPassager> {
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(12.0),
-            child: Form(
+    child: Card(
+    elevation: 8.0,
+    shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(16.0),
+    ),
+    shadowColor: Colors.blue.withOpacity(0.9),
+    child: Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Form(
                 key: _formkey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -371,6 +379,8 @@ class _InscriptionState extends State<InsPassager> {
                   ],
                 )
             ),
+    ),
+    ),
           ),
         )
     );

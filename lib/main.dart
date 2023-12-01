@@ -22,6 +22,42 @@ void main() async {
   );
   runApp(const MyApp());
 }
+/*
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Wassalny',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Navigate directly to the login page
+    Future.delayed(Duration.zero, () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => loginPassager.MyApp()),
+      );
+    });
+
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(), //loader
+      ),
+    );
+  }
+}
+*/
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -50,6 +86,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+
 
   void interfaceAjoutDemande() {
     Navigator.push(
@@ -176,3 +214,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+

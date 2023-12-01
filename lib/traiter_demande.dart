@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class MyApp extends StatelessWidget {
   final String demandeId;
-
 
   MyApp({required this.demandeId});
 
@@ -15,7 +13,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Traiter Demande'),
         ),
-        body: TraiterDemandePage(demandeId:demandeId),
+        body: TraiterDemandePage(demandeId: demandeId),
       ),
     );
   }
@@ -36,7 +34,7 @@ class _TraiterDemandePageState extends State<TraiterDemandePage> {
   @override
   void initState() {
     super.initState();
-    demandeStream = FirebaseFirestore.instance.collection('Demande').doc(widget.demandeId).snapshots();
+    demandeStream = FirebaseFirestore.instance.collection('Demandes').doc(widget.demandeId).snapshots();
   }
 
   @override
@@ -58,56 +56,98 @@ class _TraiterDemandePageState extends State<TraiterDemandePage> {
           }
 
           var demandeData = snapshot.data!.data();
+
           // Display the data in your UI
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Demande ID : ${widget.demandeId}'),
-                Text('Nom : "Nom de Passager'),
-                Text('Depart : ${demandeData?['depart']}'),
-                Text('Destination: ${demandeData?['destination']}'),
-                Text('Nombre de Passager : ${demandeData?['nbrpersonne']}'),
-                Text('Prix Proposee : ${demandeData?['prix']}'),
-                Text('Commentaire : ${demandeData?['commentaire']}'),
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
 
-                SizedBox(height: 20),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        // Handle Accept logic
-                        // You can use demandeData and widget.demandeId to perform actions
-                        print('Accepted');
-                      },
-                      child: Text('Accept'),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: Card(
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //Text('Demande ID: ${widget.demandeId}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        SizedBox(height: 10),
+                        DecoratedField(label: 'Nom :', value: 'Nom de Passager'),
+                        DecoratedField(label: 'Départ:', value: '${demandeData?['depart']}'),
+                        DecoratedField(label: 'Destination:', value: '${demandeData?['destination']}'),
+                        DecoratedField(label: 'Nombre des Passagers:', value: '${demandeData?['nbrpersonne']}'),
+                        DecoratedField(label: 'Prix Proposé:', value: '${demandeData?['prix']}'),
+                        DecoratedField(label: 'Commentaire:', value: '${demandeData?['commentaire']}'),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Use SizedBox for margin between buttons and icons
+                            IconButton(
+                              onPressed: () {
+                                // Handle Accept logic
+                                // You can use demandeData and widget.demandeId to perform actions
+                                print('Accepted');
+                              },
+                              icon: Icon(Icons.check),
+                            ),
+                            SizedBox(width: 40), // Add margin between buttons
+                            IconButton(
+                              onPressed: () {
+                                // Handle Decline logic
+                                // You can use demandeData and widget.demandeId to perform actions
+                                print('Declined');
+                              },
+                              icon: Icon(Icons.close),
+                            ),
+                            SizedBox(width: 40), // Add margin between buttons
+                            IconButton(
+                              onPressed: () {
+                                // Handle Negotiate logic
+                                // You can use demandeData and widget.demandeId to perform actions
+                                print('Negotiate');
+                              },
+                              icon: Icon(Icons.chat),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Handle Decline logic
-                        // You can use demandeData and widget.demandeId to perform actions
-                        print('Declined');
-                      },
-                      child: Text('Decline'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Handle Negotiate logic
-                        // You can use demandeData and widget.demandeId to perform actions
-                        print('Negotiate');
-                      },
-                      child: Text('Negotiate'),
-                    ),
-                  ],
+                  ),
                 ),
-              ],
+              ),
             ),
           );
         },
       ),
+    );
+  }
+}
+
+class DecoratedField extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const DecoratedField({Key? key, required this.label, required this.value}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('$label', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15, color: Color(0xFF3980AE))),
+        Row(
+          children: [
+            //Icon(Icons.info, size: 16, color: Colors.blue),
+            SizedBox(width: 10),
+            Flexible(
+              child: Text('$value'),
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+      ],
     );
   }
 }
