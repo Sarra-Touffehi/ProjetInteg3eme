@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_core/firebase_core.dart';
-
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:projetinteg3eme/services/authentification_firbase_service.dart';
 
 
 void main() {
@@ -34,6 +32,8 @@ class InsPassager extends StatefulWidget {
 
 class _InscriptionState extends State<InsPassager> {
 
+  final FirebaseAuthService _auth =FirebaseAuthService();
+
   final _formkey = GlobalKey<FormState>();
 
   TextEditingController firstNameController = TextEditingController();
@@ -57,37 +57,28 @@ class _InscriptionState extends State<InsPassager> {
 
   Future<void> ajouterPassagerToFirestore() async {
 
-    CollectionReference passagers = FirebaseFirestore.instance.collection('Passagers');
-    QuerySnapshot toutLesPassagers = await passagers.get();
-    int nombrePassagers = toutLesPassagers.docs.length;
-    //crée un identifiant unique pour le nouveau passager en utilisant le nombre actuel de passagers et en l'incrémentant de 1
-    String idPassager = (nombrePassagers + 1).toString();
-    //crée une référence à un nouveau document dans la collection 'Passagers' avec l'identifiant nouvellement généré.
-    DocumentReference docRef = passagers.doc(idPassager);
-
-    // Set the data for the document
-    await docRef.set({
-      'nom': firstNameController.text,
-      'prenom': lastNameController.text,
-      'telephone': mobileController.text,
-      'localisation': adresseController.text,
-      'email': emailController.text,
-      'datedenaissance': dateDeNaissanceController.text,
-      'genre': genreController.text,
-      'password': passwordController.text,
-    });
-//met à jour l'état de la page en assignant les valeurs actuelles
-// des contrôleurs de texte aux clés correspondantes dans la carte userData.
     setState(() {
       userData['nom'] = firstNameController.text;
       userData['prenom'] = lastNameController.text;
       userData['telephone'] = mobileController.text;
-      userData['localisation'] = mobileController.text;
+      userData['localisation'] = adresseController.text;
       userData['email'] = emailController.text;
       userData['datedenaissance'] = dateDeNaissanceController.text;
       userData['genre'] = genreController.text;
       userData['password'] = passwordController.text;
     });
+
+    _auth.signUp_Passager(
+        firstNameController.text,
+        lastNameController.text,
+        mobileController.text,
+        adresseController.text,
+        emailController.text,
+        dateDeNaissanceController.text,
+        genreController.text,
+        passwordController.text
+    );
+
   }
 
 

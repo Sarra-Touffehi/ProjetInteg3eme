@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_core/firebase_core.dart';
-
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:projetinteg3eme/services/authentification_firbase_service.dart';
 
 
 void main() {
@@ -34,6 +32,8 @@ class InsChauffeur extends StatefulWidget {
 
 class _InscriptionState extends State<InsChauffeur> {
 
+  final FirebaseAuthService _auth =FirebaseAuthService();
+
   final _formkey = GlobalKey<FormState>();
 
   TextEditingController firstNameController = TextEditingController();
@@ -41,8 +41,8 @@ class _InscriptionState extends State<InsChauffeur> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController adresseController = TextEditingController();
-  TextEditingController NumPermisController = TextEditingController();
-  TextEditingController NumMatriculeController = TextEditingController();
+  TextEditingController numPermisController = TextEditingController();
+  TextEditingController numMatriculeController = TextEditingController();
   TextEditingController dateDeNaissanceController = TextEditingController();
   TextEditingController genreController = TextEditingController(text: "Male");
   TextEditingController passwordController = TextEditingController();
@@ -57,30 +57,6 @@ class _InscriptionState extends State<InsChauffeur> {
   Map userData = {};
 
   Future<void> ajouterChauffeurToFirestore() async {
-
-    CollectionReference chauffeurs = FirebaseFirestore.instance.collection('Chauffeurs');
-    QuerySnapshot toutLesChauffeurs = await chauffeurs.get();
-    int nombreChauffeurs = toutLesChauffeurs.docs.length;
-    //crée un identifiant unique pour le nouveau passager en utilisant le nombre actuel de passagers et en l'incrémentant de 1
-    String idChauffeur = (nombreChauffeurs + 1).toString();
-    //crée une référence à un nouveau document dans la collection 'Passagers' avec l'identifiant nouvellement généré.
-    DocumentReference docRef = chauffeurs.doc(idChauffeur);
-
-    // Set the data for the document
-    await docRef.set({
-      'nom': firstNameController.text,
-      'prenom': lastNameController.text,
-      'telephone': mobileController.text,
-      'localisation': adresseController.text,
-      'email': emailController.text,
-      'datedenaissance': dateDeNaissanceController.text,
-      'genre': genreController.text,
-      'password': passwordController.text,
-      'numPermis':NumPermisController,
-      'numMatricule':NumMatriculeController,
-    });
-//met à jour l'état de la page en assignant les valeurs actuelles
-// des contrôleurs de texte aux clés correspondantes dans la carte userData.
     setState(() {
       userData['nom'] = firstNameController.text;
       userData['prenom'] = lastNameController.text;
@@ -89,10 +65,23 @@ class _InscriptionState extends State<InsChauffeur> {
       userData['email'] = emailController.text;
       userData['datedenaissance'] = dateDeNaissanceController.text;
       userData['genre'] = genreController.text;
-      userData['numPermis'] = NumPermisController.text;
-      userData['numMatricule'] = NumMatriculeController.text;
+      userData['numPermis'] = numPermisController.text;
+      userData['numMatricule'] = numMatriculeController.text;
 
     });
+
+    _auth.signUp_Chauffeur(
+        firstNameController.text,
+        lastNameController.text,
+        mobileController.text,
+        adresseController.text,
+        emailController.text,
+        dateDeNaissanceController.text,
+        genreController.text,
+        passwordController.text,
+        numPermisController.text,
+        numMatriculeController.text
+    );
   }
 
 
@@ -364,7 +353,7 @@ class _InscriptionState extends State<InsChauffeur> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
-                        controller: NumPermisController,
+                        controller: numPermisController,
                         validator: MultiValidator([
                           RequiredValidator(errorText: 'Veiller entrer votre Numero de Permis'),
                           MinLengthValidator(3,
@@ -389,7 +378,7 @@ class _InscriptionState extends State<InsChauffeur> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
-                        controller: NumMatriculeController,
+                        controller: numMatriculeController,
                         validator: MultiValidator([
                           RequiredValidator(errorText: 'Veiller entrer votre matricule '),
                           MinLengthValidator(3,

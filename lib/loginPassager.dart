@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projetinteg3eme/services/authentification_firbase_service.dart';
 
+import 'main.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -89,8 +91,13 @@ class _LoginPageState extends State<LoginPage> {
     User? user=await _auth.signIn(email, password);
 
     if(user != null){
-print("User is successfully SignedIn");
-Navigator.pushNamed(context, "/main");
+        print("User is successfully SignedIn");
+        print("User UID : ${user.uid}");
+        print(_auth.userType(email, password));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MyHomePage(title: "Wassalny",)),
+        );
     }
     else{
       print("some error happend");
