@@ -125,6 +125,30 @@ class _DemandeFormState extends State<DemandeForm> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                        controller: departController,
+                        validator: MultiValidator([
+                          RequiredValidator(errorText: 'Veiller entrer votre Adresse'),
+                          MinLengthValidator(10,
+                              errorText:
+                              'Le Adresse doit etre de 10 charactere minimum'),
+                        ]),
+                        decoration: InputDecoration(
+                            hintText: 'Entre Votre Depart',
+                            labelText: 'Depart',
+                            prefixIcon: Icon(
+                              Icons.home,
+                              color: Colors.green,
+                            ),
+                            errorStyle: TextStyle(fontSize: 18.0),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(9.0)))),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
                         controller: destinationController,
                         validator: MultiValidator([
                           RequiredValidator(errorText: 'Veiller entrer votre Adresse'),
@@ -259,16 +283,6 @@ class _DemandeFormState extends State<DemandeForm> {
                             height: 50,
                           ),
                         )),
-                    Center(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 60),
-                        child: Text(
-                          'SIGN IN',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    )
                   ],
                 )),
     ),

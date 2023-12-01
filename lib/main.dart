@@ -22,7 +22,7 @@ void main() async {
   );
   runApp(const MyApp());
 }
-/*
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -57,9 +57,9 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
-*/
 
-class MyApp extends StatelessWidget {
+
+/*class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
@@ -213,5 +213,5 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
-}
+}*/
 

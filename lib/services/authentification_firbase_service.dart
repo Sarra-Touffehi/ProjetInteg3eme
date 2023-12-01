@@ -15,6 +15,7 @@ Future<String?> userType(String email,String password) async{
     if (userSnapshot.exists) {
       dynamic type = userSnapshot.get('type');
       print('Type Utilisateur : $type');
+      return type;
     }
   }
   catch(e){

@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _signIn() async{
+/*  void _signIn() async{
     String email=emailController.text;
     String password=passwordController.text;
     User? user=await _auth.signIn(email, password);
@@ -136,14 +136,14 @@ class _LoginPageState extends State<LoginPage> {
       print(_auth.userType(email, password));
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MyHomePage(title: "Wassalny",)),
+        MaterialPageRoute(builder: (context) => MyHomePage()),
       );
     }
     else{
       print("some error happened");
     }
-  }
-/*
+  }*/
+
   void _signIn() async {
     String email = emailController.text;
     String password = passwordController.text;
@@ -156,26 +156,22 @@ class _LoginPageState extends State<LoginPage> {
       String? userType = await _auth.userType(email, password);
       print("User Type: $userType");
 
-      if (userType == "chauffeur") {
+      if (userType == "Chauffeur") {
         // Open TraiterDemandePage
         Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Traiterdemande.MyApp(demandeId : "1"),
-          ),
+            context,
+            MaterialPageRoute(builder: (context) => Traiterdemande.MyApp(demandeId : "1"))
         );
-      } else if (userType == "passager") {
+      } else if (userType == "Passager") {
         // Open DemandeForm
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => demande.DemandeForm(),
-          ),
+          MaterialPageRoute(builder: (context) => demande.MyApp()),
         );
       }
     } else {
       print("some error happened");
     }
-  } */
+  }
 
 }
