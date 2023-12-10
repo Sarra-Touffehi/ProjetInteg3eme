@@ -5,8 +5,10 @@ import 'InscrireChauffeur.dart' as InsChauffeur;
 import 'demande_page.dart' as demande;
 import 'traiter_demande.dart' as Traiterdemande;
 import 'inscri_passager_page.dart' as isnPassager;
+
+import 'Profile.dart' as intProfile;
+
 import 'home_page.dart' as home;
-import 'home_page_chauffeur.dart' as homeCh;
 import 'main.dart';
 
 void main() => runApp(MyApp());
@@ -159,25 +161,26 @@ class _LoginPageState extends State<LoginPage> {
 
       if (userType == "Chauffeur") {
         // Open TraiterDemandePage
+        /*Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Traiterdemande.MyApp(demandeId : "1"))
+        );*/
+
         Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => homeCh.HomePageChauffeur(user: user)),
+            context,
+            MaterialPageRoute(builder: (context) => intProfile.MyApp())
         );
+
       } else if (userType == "Passager") {
-        // Pass the 'user' parameter to the home page
+        // Open DemandeForm
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => home.HomePage(user: user)),
+          MaterialPageRoute(builder: (context) => demande.MyApp()),
         );
-      } else {
-        print("Unknown user type");
       }
     } else {
-      print("Login failed");
-      // Handle login failure (show an error message, etc.)
+      print("some error happened");
     }
   }
-
-
 
 }

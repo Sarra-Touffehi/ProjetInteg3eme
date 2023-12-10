@@ -24,6 +24,17 @@ Future<String?> userType(String email,String password) async{
   return null;
 }
 
+Future<String> userInfos() async{
+  try{
+    User utilisateur =await _auth.currentUser!;
+    return utilisateur.uid;
+  }
+  catch(e){
+    print("User not found in Firestore.");
+  }
+  return "null";
+}
+
 Future<User?> signIn(String email,String password) async{
   try{
     UserCredential credential =await _auth.signInWithEmailAndPassword(email: email, password: password);
@@ -33,6 +44,31 @@ Future<User?> signIn(String email,String password) async{
     print("some error occured");
   }
   return null;
+}
+
+void logOut() async{
+  try{
+    _auth.signOut();
+  }
+  catch(e){
+    print("some error occured en deconnection");
+  }
+}
+
+Future<void> update_Info(String nom,String prenom,String telephone,String localisation,
+    String datedenaissance,String genre,String uid) async {
+  try {
+    return _firestore.collection('users').doc(uid).update({
+      'nom': nom,
+      'prenom': prenom,
+      'telephone': telephone,
+      'localisation': localisation,
+      'datedenaissance': datedenaissance,
+      'genre': genre,
+    });
+  } catch (e) {
+    print('Error: $e');
+  }
 }
 
 Future<User?> signUp_Passager(String nom,String prenom,String telephone,String localisation,

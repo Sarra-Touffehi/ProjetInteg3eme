@@ -212,8 +212,8 @@ class _InscriptionState extends State<InsPassager> {
                         onTap: () async {
                           DateTime? pickedDate = await showDatePicker(
                               context: context, initialDate: DateTime.now(),
-                              firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
-                              lastDate: DateTime(2101)
+                              firstDate: DateTime(1950), //DateTime.now() - not to allow to choose before today.
+                              lastDate: DateTime.now()
                           );
 
                           if(pickedDate != null ){
