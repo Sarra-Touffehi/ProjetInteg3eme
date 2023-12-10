@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'services/localisation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'loginPassager.dart' as loginPassager;
 
 
 void main() {
@@ -16,6 +18,24 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Ajouter Demande'),
+          actions: [
+        Padding(
+        padding: EdgeInsets.only(right: 55.0),
+            child:IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () async {
+                // Ajouter la logique de déconnexion ici
+                await FirebaseAuth.instance.signOut();
+                print('User logout');
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => loginPassager.MyApp()),
+                );
+
+              },
+            ),
+        ),
+          ],
         ),
         body: DemandeForm(),
       ),

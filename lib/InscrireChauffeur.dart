@@ -3,6 +3,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:projetinteg3eme/services/authentification_firbase_service.dart';
+import 'loginPassager.dart' as loginPassager;
 
 
 void main() {
@@ -418,6 +419,11 @@ class _InscriptionState extends State<InsChauffeur> {
                                   await ajouterChauffeurToFirestore();
                                   print('form submiitted');
                                   print(userData);
+
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => loginPassager.MyApp()),
+                                  );
                                 }
                                 else {
                                   // Show a message if the form is not valid

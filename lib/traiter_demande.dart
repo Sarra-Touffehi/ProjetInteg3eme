@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'loginPassager.dart' as loginPassager;
 class MyApp extends StatelessWidget {
   final String demandeId;
 
@@ -12,6 +13,24 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Traiter Demande'),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 55.0),
+              child:IconButton(
+                icon: Icon(Icons.logout),
+                onPressed: () async {
+                  // Ajouter la logique de déconnexion ici
+                  await FirebaseAuth.instance.signOut();
+                  print('User logout');
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => loginPassager.MyApp()),
+                  );
+
+                },
+              ),
+            ),
+          ],
         ),
         body: TraiterDemandePage(demandeId: demandeId),
       ),
