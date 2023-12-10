@@ -1,9 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'InscrireChauffeur.dart' as InsChauffeur;
-import 'demande_page.dart' as demande;
-import 'inscri_passager_page.dart' as isnPassager;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'traiter_demande.dart' as traiterDemande;
 import 'loginPassager.dart' as loginPassager;
 
@@ -20,21 +16,21 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.lightBlue[200],
       ),
- //     home: HomePage(user: ,),
+      home: HomePageChauffeur(user: FirebaseAuth.instance.currentUser!),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
+class HomePageChauffeur extends StatefulWidget {
   final User user;
 
-  HomePage({required this.user});
+  HomePageChauffeur({required this.user});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageChauffeurState createState() => _HomePageChauffeurState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageChauffeurState extends State<HomePageChauffeur> {
   late String userName;
   late String userEmail;
 
@@ -49,15 +45,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('VTC'),
-
+        title: Text('VTC Chauffeur'),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 55.0),
             child: IconButton(
               icon: Icon(Icons.logout),
               onPressed: () async {
-                // Ajouter la logique de déconnexion ici
+                // Logout logic
                 await FirebaseAuth.instance.signOut();
                 print('User logout');
                 Navigator.pushReplacement(
@@ -86,67 +81,42 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               leading: Icon(Icons.home),
-              title: Text('Accueil'),
+              title: Text('Accueil Chauffeur'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
               leading: Icon(Icons.directions_car),
-              title: Text('Mes Trajets'),
+              title: Text('Mes Trajets Chauffeur'),
               onTap: () {
                 Navigator.pop(context);
+                // Add navigation logic for Mes Trajets Chauffeur
               },
             ),
             ListTile(
               leading: Icon(Icons.history),
-              title: Text('About-Us'),
+              title: Text('About-Us '),
               onTap: () {
                 Navigator.pop(context);
+                // Add navigation logic for About-Us Chauffeur
               },
             ),
           ],
         ),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Bienvenue sur la page d\'accueil, $userName!',
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(height: 20),
-          /*  Image.asset(
-              'assets/voiture.png',
-              width: 150,
-              height: 150,
-              fit: BoxFit.contain,
-            ), */
-            SizedBox(height: 20),
-             FloatingActionButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return DemandeContent();
-                  },
-                );
-              },
-              child: Icon(Icons.add),
-            ),
-          ],
+        child: Container(
+         child : TraiterDemandeContent(),
         ),
       ),
     );
   }
 }
-class DemandeContent extends StatelessWidget {
+
+class TraiterDemandeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return demande.DemandeForm();
+    return traiterDemande.TraiterDemandePage(demandeId: "1");
   }
 }
-
-
-

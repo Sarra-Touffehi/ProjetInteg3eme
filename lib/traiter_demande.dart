@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'loginPassager.dart' as loginPassager;
 class MyApp extends StatelessWidget {
   final String demandeId;
@@ -49,11 +50,23 @@ class TraiterDemandePage extends StatefulWidget {
 
 class _TraiterDemandePageState extends State<TraiterDemandePage> {
   late Stream<DocumentSnapshot<Map<String, dynamic>>> demandeStream;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
     super.initState();
     demandeStream = FirebaseFirestore.instance.collection('Demandes').doc(widget.demandeId).snapshots();
+
+   /*
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Received message: ${message.notification?.body}');
+
+    });
+
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('App opened from notification!');
+    }); */
   }
 
   @override
@@ -142,7 +155,10 @@ class _TraiterDemandePageState extends State<TraiterDemandePage> {
       ),
     );
   }
+
 }
+
+
 
 class DecoratedField extends StatelessWidget {
   final String label;

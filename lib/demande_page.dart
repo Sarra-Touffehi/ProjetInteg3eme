@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:geolocator/geolocator.dart';
@@ -52,11 +53,26 @@ class DemandeForm extends StatefulWidget {
 }
 
 class _DemandeFormState extends State<DemandeForm> {
+ /* final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance; */
 
   @override
   void initState() {
     super.initState();
     updateDestination();
+  /*  _firebaseMessaging.requestPermission();
+    _firebaseMessaging.getToken().then((token) {
+      print('FCM Token: $token');
+
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Received message: ${message.notification?.body}');
+
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+
+      print('App opened from notification!');
+    }); */
   }
 
   String? nombrePersonne="1";
