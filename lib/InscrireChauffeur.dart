@@ -4,8 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:projetinteg3eme/services/authentification_firbase_service.dart';
 import 'loginPassager.dart' as loginPassager;
-
-
+import 'VehiculeService.dart' as vehiculeServ;
 void main() {
   runApp(MyApp());
 }
@@ -32,9 +31,10 @@ class InsChauffeur extends StatefulWidget {
 }
 
 class _InscriptionState extends State<InsChauffeur> {
-
+  //String selectedMarque = '';
+  //String selectedModele = '';
   final FirebaseAuthService _auth =FirebaseAuthService();
-
+  final vehiculeServ.VehiculeService _vehiculeService = vehiculeServ.VehiculeService();
   final _formkey = GlobalKey<FormState>();
 
   TextEditingController firstNameController = TextEditingController();
@@ -43,11 +43,13 @@ class _InscriptionState extends State<InsChauffeur> {
   TextEditingController emailController = TextEditingController();
   TextEditingController adresseController = TextEditingController();
   TextEditingController numPermisController = TextEditingController();
-  TextEditingController numMatriculeController = TextEditingController();
   TextEditingController dateDeNaissanceController = TextEditingController();
   TextEditingController genreController = TextEditingController(text: "Male");
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController numMatriculeController = TextEditingController();
+  TextEditingController modeleController = TextEditingController(text:"haha");
+  TextEditingController marqueController = TextEditingController(text: "Ford");
 
   @override
   void initState() {
@@ -66,8 +68,11 @@ class _InscriptionState extends State<InsChauffeur> {
       userData['email'] = emailController.text;
       userData['datedenaissance'] = dateDeNaissanceController.text;
       userData['genre'] = genreController.text;
+      userData['password']=passwordController.text;
       userData['numPermis'] = numPermisController.text;
       userData['numMatricule'] = numMatriculeController.text;
+      userData['marque'] = marqueController.text;
+      userData['modele'] = modeleController.text;
 
     });
 
@@ -81,7 +86,14 @@ class _InscriptionState extends State<InsChauffeur> {
         genreController.text,
         passwordController.text,
         numPermisController.text,
-        numMatriculeController.text
+        numMatriculeController.text,
+        marqueController.text,
+        modeleController.text
+    );
+    await _vehiculeService.addVehicule(
+      marqueController.text,
+      modeleController.text,
+      numMatriculeController.text,
     );
   }
 
@@ -373,7 +385,7 @@ class _InscriptionState extends State<InsChauffeur> {
                             hintText: 'Entre Votre Numero de Permis',
                             labelText: 'Numéro de permis',
                             prefixIcon: Icon(
-                              Icons.person,
+                              Icons.numbers,
                               color: Colors.green,
                             ),
                             errorStyle: TextStyle(fontSize: 18.0),
@@ -389,7 +401,7 @@ class _InscriptionState extends State<InsChauffeur> {
                       child: TextFormField(
                         controller: numMatriculeController,
                         validator: MultiValidator([
-                          RequiredValidator(errorText: 'Veiller entrer votre matricule '),
+                          RequiredValidator(errorText: 'Veiller entrer la matricule de votre voiture '),
                           MinLengthValidator(3,
                               errorText:
                               'Le numero de matricule doit contenir de 3 charactere minimum'),
@@ -398,7 +410,7 @@ class _InscriptionState extends State<InsChauffeur> {
                             hintText: 'Entre Votre matricule',
                             labelText: 'matricule',
                             prefixIcon: Icon(
-                              Icons.person,
+                              Icons.numbers,
                               color: Colors.green,
                             ),
                             errorStyle: TextStyle(fontSize: 18.0),
@@ -408,6 +420,66 @@ class _InscriptionState extends State<InsChauffeur> {
                                 BorderRadius.all(Radius.circular(9.0)))),
                       ),
                     ),
+
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DropdownButtonFormField<String>(
+                        value: marqueController.text,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            marqueController.text = newValue!;
+                          });
+                        },
+                        items: ['Ford', 'Kia', 'Toyota', 'Chevrolet', 'Hyundai', 'Nissan',
+                          'Volkswagen',  'Renault','Clio'].map((String option) {
+                          return DropdownMenuItem<String>(
+                            value: option,
+                            child: Text(option),
+                          );
+                        }).toList(),
+                        decoration: InputDecoration(
+                          hintText: 'Marque',
+                          labelText: 'Marque',
+                          prefixIcon: Icon(
+                            Icons.car_crash,
+                            color: Colors.green,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                            borderRadius: BorderRadius.all(Radius.circular(9)),
+                          ),
+                        ),
+                      ),
+                    ),
+
+
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: modeleController,
+                        validator: MultiValidator([
+                          RequiredValidator(errorText: 'Veiller entrer le modèle de votre voiture'),
+                          MinLengthValidator(10,
+                              errorText:
+                              'Le modèle  doit etre de 5 charactere minimum'),
+                        ]),
+                        decoration: InputDecoration(
+                            hintText: 'Entre Votre Modele de voiture',
+                            labelText: 'Modèle',
+                            prefixIcon: Icon(
+                              Icons.car_crash,
+                              color: Colors.blueGrey,
+                            ),
+                            errorStyle: TextStyle(fontSize: 18.0),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(9.0)))),
+                      ),
+                    ),
+
                     Center(
                         child: Padding(
                           padding: const EdgeInsets.all(18.0),

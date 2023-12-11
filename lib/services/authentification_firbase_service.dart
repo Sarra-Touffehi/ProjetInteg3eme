@@ -97,7 +97,7 @@ String email,String datedenaissance,String genre,String password) async {
 }
 
 Future<User?> signUp_Chauffeur(String nom,String prenom,String telephone,String localisation,
-    String email,String datedenaissance,String genre,String password,String numPermis,String numMatricule) async {
+    String email,String datedenaissance,String genre,String password,String numPermis,String numMatricule,String marque,String modele) async {
   try {
     UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
       email: email,
@@ -113,6 +113,8 @@ Future<User?> signUp_Chauffeur(String nom,String prenom,String telephone,String 
       'datedenaissance': datedenaissance,
       'genre': genre,
       'numMatricule': numMatricule,
+      'marque':marque,
+      'modele':modele,
       'numPermis':numPermis,
       'type': "Chauffeur"
     });
