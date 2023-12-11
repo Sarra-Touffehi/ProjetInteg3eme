@@ -6,6 +6,7 @@ import 'demande_page.dart' as demande;
 import 'inscri_passager_page.dart' as isnPassager;
 import 'traiter_demande.dart' as traiterDemande;
 import 'loginPassager.dart' as loginPassager;
+import 'Profile.dart' as intProfile;
 
 void main() {
   runApp(MyApp());
@@ -73,14 +74,22 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(userName),
-              accountEmail: Text(userEmail),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.person,
-                  color: Colors.blue,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => intProfile.MyApp()),
+                );
+              },
+              child: UserAccountsDrawerHeader(
+                accountName: Text(userName),
+                accountEmail: Text(userEmail),
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.person,
+                    color: Colors.blue,
+                  ),
                 ),
               ),
             ),
@@ -92,8 +101,8 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.directions_car),
-              title: Text('Mes Trajets'),
+              leading: Icon(Icons.comment),
+              title: Text('FeedBacks'),
               onTap: () {
                 Navigator.pop(context);
               },
@@ -113,7 +122,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Bienvenue sur la page d\'accueil, $userName!',
+              'Bienvenue sur la page d\'accueil, $userName! Tu peux ajouter votre demande',
               style: TextStyle(fontSize: 24),
             ),
             SizedBox(height: 20),
@@ -123,20 +132,20 @@ class _HomePageState extends State<HomePage> {
               height: 150,
               fit: BoxFit.contain,
             ), */
-            SizedBox(height: 20),
-             FloatingActionButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return DemandeContent();
-                  },
-                );
-              },
-              child: Icon(Icons.add),
-            ),
+
           ],
         ),
+      ),
+      floatingActionButton:FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return DemandeContent();
+            },
+          );
+        },
+        child: Icon(Icons.add,color: Colors.white),
       ),
     );
   }

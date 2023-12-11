@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'traiter_demande.dart' as traiterDemande;
 import 'loginPassager.dart' as loginPassager;
+import 'Profile.dart' as intProfile;
 
 void main() {
   runApp(MyApp());
@@ -68,30 +69,45 @@ class _HomePageChauffeurState extends State<HomePageChauffeur> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(userName),
-              accountEmail: Text(userEmail),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.person,
-                  color: Colors.blue,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => intProfile.MyApp()),
+                );
+              },
+              child: UserAccountsDrawerHeader(
+                accountName: Text(userName),
+                accountEmail: Text(userEmail),
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.person,
+                    color: Colors.blue,
+                  ),
                 ),
               ),
             ),
             ListTile(
               leading: Icon(Icons.home),
-              title: Text('Accueil Chauffeur'),
+              title: Text('Accueil '),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
               leading: Icon(Icons.directions_car),
-              title: Text('Mes Trajets Chauffeur'),
+              title: Text('Mes Trajets '),
               onTap: () {
                 Navigator.pop(context);
                 // Add navigation logic for Mes Trajets Chauffeur
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.comment),
+              title: Text('FeedBacks'),
+              onTap: () {
+                Navigator.pop(context);
               },
             ),
             ListTile(

@@ -5,6 +5,8 @@ import 'InscrireChauffeur.dart' as InsChauffeur;
 import 'demande_page.dart' as demande;
 import 'traiter_demande.dart' as Traiterdemande;
 import 'inscri_passager_page.dart' as isnPassager;
+import 'home_page.dart' as homePassager;
+import 'home_page_chauffeur.dart' as homeChauffeur;
 
 import 'Profile.dart' as intProfile;
 
@@ -147,6 +149,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }*/
 
+  /*
   void _signIn() async {
     String email = emailController.text;
     String password = passwordController.text;
@@ -182,5 +185,37 @@ class _LoginPageState extends State<LoginPage> {
       print("some error happened");
     }
   }
+*/
+  void _signIn() async {
+    String email = emailController.text;
+    String password = passwordController.text;
+    User? user = await _auth.signIn(email, password);
 
+    if (user != null) {
+      print("User is successfully SignedIn");
+      print("User UID : ${user.uid}");
+
+      String? userType = await _auth.userType(email, password);
+      print("User Type: $userType");
+
+      if (userType == "Chauffeur") {
+        // Open TraiterDemandePage
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => homeChauffeur.HomePageChauffeur(user: user)),
+        );
+      } else if (userType == "Passager") {
+        // Pass the 'user' parameter to the home page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => homePassager.HomePage(user: user)),
+        );
+      } else {
+        print("Unknown user type");
+      }
+    } else {
+      print("Login failed");
+      // Handle login failure (show an error message, etc.)
+    }
+  }
 }

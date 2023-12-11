@@ -151,7 +151,7 @@ class _InscriptionState extends State<InsChauffeur> {
                         ]),
                         decoration: InputDecoration(
                             hintText: 'Entre Votre Prenom',
-                            labelText: 'Preom',
+                            labelText: 'Prenom',
                             prefixIcon: Icon(
                               Icons.person,
                               color: Colors.green,
