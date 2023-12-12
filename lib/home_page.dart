@@ -10,6 +10,7 @@ import 'Profile.dart' as intProfile;
 import 'CommentaireService.dart' as commserv;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:projetinteg3eme/classes/Commentaire.dart';
+import 'package:projetinteg3eme/classes/passager.dart' as passager;
 void main() {
   runApp(MyApp());
 }

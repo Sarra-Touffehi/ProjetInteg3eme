@@ -48,7 +48,7 @@ class _InscriptionState extends State<InsChauffeur> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController numMatriculeController = TextEditingController();
-  TextEditingController modeleController = TextEditingController(text:"haha");
+  TextEditingController modeleController = TextEditingController(text:"");
   TextEditingController marqueController = TextEditingController(text: "Ford");
 
   @override

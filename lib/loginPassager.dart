@@ -34,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   final FirebaseAuthService _auth =FirebaseAuthService();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool showPassword = false;
 
   @override
   void dispose(){
@@ -45,8 +46,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
+      body: Center(
+       child: Padding(
+        padding : EdgeInsets.all(16.0),
         child: Card(
           elevation: 4.0,
           shape: RoundedRectangleBorder(
@@ -54,10 +56,15 @@ class _LoginPageState extends State<LoginPage> {
           ),
           color: Colors.white,
           shadowColor: Colors.blue.withOpacity(0.9),
-          margin: EdgeInsets.symmetric(horizontal: 40.0),
+          margin: EdgeInsets.symmetric(horizontal: 20.0),
+    child: Container(
+    width: 350.0,
+          height: 500,
+
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(8.0),
             child: Column(
+
               children: [
                 Container(
                   width: 200,
@@ -71,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: emailController,
                     decoration: InputDecoration(
                       labelText: 'Email',
+                     // prefixIcon: Icon(Icons.email),
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -80,9 +88,18 @@ class _LoginPageState extends State<LoginPage> {
                   width: 200.0,
                   child: TextField(
                     controller: passwordController,
-                    obscureText: true,
+                    obscureText: !showPassword,
                     decoration: InputDecoration(
                       labelText: 'Password',
+                      //prefixIcon: Icon(Icons.lock),
+                      suffixIcon: IconButton(
+                        icon: Icon(showPassword ? Icons.visibility : Icons.visibility_off),
+                        onPressed: () {
+                          setState(() {
+                            showPassword = !showPassword;
+                          });
+                        },
+                      ),
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -126,6 +143,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
+      ),
+      ),
       ),
     );
   }
