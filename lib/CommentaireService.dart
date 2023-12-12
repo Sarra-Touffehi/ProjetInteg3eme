@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:projetinteg3eme/services/authentification_firbase_service.dart' as auth;
-import 'package:flutter/material.dart';
 import 'package:projetinteg3eme/classes/Commentaire.dart';
 class CommentService {
   final CollectionReference commentsCollection = FirebaseFirestore.instance
@@ -23,9 +21,6 @@ class CommentService {
 
   Future<List<Comment>> getComments() async {
     try {
-      // Récupérer l'identifiant de l'utilisateur actuellement authentifié
-      String userId = await _auth.userInfos();
-
       // Récupérer les commentaires de la collection Firestore
       QuerySnapshot querySnapshot = await commentsCollection.get();
 

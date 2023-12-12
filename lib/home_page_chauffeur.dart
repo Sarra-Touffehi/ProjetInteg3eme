@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'traiter_demande.dart' as traiterDemande;
 import 'loginPassager.dart' as loginPassager;
 import 'Profile.dart' as intProfile;
+import 'consulterDemande.dart' as intDemande;
 
 void main() {
   runApp(MyApp());
@@ -108,6 +109,17 @@ class _HomePageChauffeurState extends State<HomePageChauffeur> {
               title: Text('FeedBacks'),
               onTap: () {
                 Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.directions_car),
+              title: Text('Consulter Demandes'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => intDemande.MyApp()),
+                );
+                //Navigator.pop(context);
               },
             ),
             ListTile(

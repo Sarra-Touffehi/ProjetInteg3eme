@@ -2,16 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projetinteg3eme/services/authentification_firbase_service.dart';
 import 'InscrireChauffeur.dart' as InsChauffeur;
-import 'demande_page.dart' as demande;
-import 'traiter_demande.dart' as Traiterdemande;
 import 'inscri_passager_page.dart' as isnPassager;
 import 'home_page.dart' as homePassager;
 import 'home_page_chauffeur.dart' as homeChauffeur;
-
-import 'Profile.dart' as intProfile;
-
-import 'home_page.dart' as home;
-import 'main.dart';
 
 void main() => runApp(MyApp());
 

@@ -33,16 +33,12 @@ class Localisation {
 
   Future<bool> positionsProche(Position position1,Position position2) async {
 
-    if (position1 != null && position2 != null) {
       double distance = await calculateDistance(position1, position2);
       if (distance < 5000) {
         return true;
       } else {
         return false;
       }
-    } else {
-      throw 'One or both positions are null';
-    }
   }
 
 

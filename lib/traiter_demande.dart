@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'loginPassager.dart' as loginPassager;
 
 class MyApp extends StatelessWidget {
@@ -51,7 +50,6 @@ class TraiterDemandePage extends StatefulWidget {
 
 class _TraiterDemandePageState extends State<TraiterDemandePage> {
   late Stream<DocumentSnapshot<Map<String, dynamic>>> demandeStream;
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {

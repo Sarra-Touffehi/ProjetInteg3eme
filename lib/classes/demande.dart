@@ -1,37 +1,14 @@
 import 'package:dio/dio.dart';
-import 'package:geolocator/geolocator.dart';
 import 'chauffeur.dart';
-//import '../services/localisation.dart';
 
 class Demande {
-  int? id;
+  String? id;
   String depart;
   String destination;
   String prix;
   int nbrPersonne;
   String commentaire;
   List<Chauffeur> chauffeurs= List.empty();
-
-  Position departPosition = Position.fromMap({
-    "latitude": 40.7128,
-    "longitude": -74.0060,
-    "accuracy": 0.0,
-    "altitude": 0.0,
-    "speed": 0.0,
-    "speed_accuracy": 0.0,
-    "heading": 0.0,
-    "timestamp": DateTime.now(),
-  });
-  Position destinationPosition = Position.fromMap({
-    "latitude": 40.7128,
-    "longitude": -74.0060,
-    "accuracy": 0.0,
-    "altitude": 0.0,
-    "speed": 0.0,
-    "speed_accuracy": 0.0,
-    "heading": 0.0,
-    "timestamp": DateTime.now(),
-  });
 
   Demande({
     required this.depart,
@@ -97,6 +74,16 @@ class Demande {
     print('Prix: $prix');
     print('Nombre de Personnes: $nbrPersonne');
     print('Commentaire: $commentaire');
+  }
+
+  factory Demande.fromMap(Map<String, dynamic> data, String documentId) {
+    return Demande.withId(
+        id: documentId,
+        depart: data['depart'] ?? '',
+        destination: data['destination'].toString() ?? '',
+        prix: data['prix'] ?? '',
+        nbrPersonne: int.parse(data['nbrpersonne']) ?? 1,
+        commentaire: data['commentaire'] ?? '',);
   }
 
 

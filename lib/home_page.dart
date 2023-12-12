@@ -1,16 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'InscrireChauffeur.dart' as InsChauffeur;
 import 'demande_page.dart' as demande;
-import 'inscri_passager_page.dart' as isnPassager;
-import 'traiter_demande.dart' as traiterDemande;
 import 'loginPassager.dart' as loginPassager;
 import 'Profile.dart' as intProfile;
 import 'CommentaireService.dart' as commserv;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:projetinteg3eme/classes/Commentaire.dart';
-import 'package:projetinteg3eme/classes/passager.dart' as passager;
 void main() {
   runApp(MyApp());
 }
